@@ -1,0 +1,37 @@
+{
+  "name": "caradhras",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "npm run serve",
+    "build": "npm run build-ts && npm run tslint",
+    "serve": "node dist/Caradhras.js",
+    "watch-node": "nodemon dist/Caradhras.js",
+    "test": "mocha test/*",
+    "build-ts": "tsc",
+    "tslint": "tslint -c tslint.json -p tsconfig.json",
+    "watch-ts": "tsc -w",
+    "debug": "npm run build && npm run watch-debug",
+    "serve-debug": "nodemon --inspect dist/Caradhras.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RaboliotTheGrey/Caradhras.git"
+  },
+  "author": "Raboliot",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RaboliotTheGrey/Caradhras/issues"
+  },
+  "homepage": "https://github.com/RaboliotTheGrey/Caradhras#readme",
+  "dependencies": {
+    "@types/node": "^11.9.4"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.9",
+    "tslint": "^5.12.1",
+    "typescript": "^3.3.3"
+  }
+}
