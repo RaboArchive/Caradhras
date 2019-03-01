@@ -22,4 +22,4 @@ describe('Firmware', () => {
   it('> getFirmware should work', () => {
     expect(firmware.getFirmware).to.be.equal(buffer);
   })
-})
+});

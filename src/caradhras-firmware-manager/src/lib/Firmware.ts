@@ -2,13 +2,6 @@ import * as _ from 'lodash';
 
 import { FirmwareError, firmwareErrorCode } from '../../../caradhras-common';
 
-export interface IFirmware {
-  version: string;
-  numericalVersion: number;
-  hardware: string;
-  buffer: Buffer;
-}
-
 export class Firmware {
   private readonly version: string;
   private readonly numericalVersion: number;

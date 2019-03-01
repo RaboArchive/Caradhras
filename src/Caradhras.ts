@@ -1,0 +1,7 @@
+
+
+const main = (): void => {
+  
+}
+
+main();
