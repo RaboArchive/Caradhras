@@ -1,2 +1,3 @@
-export * from './errors/error_common_type'
+export * from './errors/errorCommonType'
+export * from './errors/errorCommonDb'
 export * from './types/FirmwareTypes'
