@@ -1,6 +1,5 @@
 import * as _ from 'lodash';
 import { setup } from 'f-mocha';
-import {run, wait} from 'f-promise';
 import { expect } from 'chai';
 
 setup();
@@ -14,6 +13,7 @@ interface dbTestInterface {
 }
 
 const testObject = {
+  _id: 'test',
   content: 'content',
   object: {
     dun: 'no',
@@ -26,20 +26,34 @@ const mongoConfig: IMongoConfig = {
   database: 'caradhras_test',
 }
 
+const testDbDao: CommonDbDoa<dbTestInterface> = new CommonDbDoa(mongoConfig, 'test');
+
 describe('> Caradhras-common', function () {
-  this.timeout(3000);
-  let testDbDao: CommonDbDoa<dbTestInterface> = new CommonDbDoa(mongoConfig, 'test');
   
   before(() => {
     testDbDao.init();
   })
-  it('> Expect to insert a document and to get it', () => {
-      console.log('origin', testObject);
-      testDbDao.insert(testObject);
-      let obj = testDbDao.get();
-      console.log('get', obj);
-      console.log('origin', testObject);
-      expect(_.omit(obj, ['_id'])).to.be.deep.equal(testObject);
-      testDbDao.delete({_id: obj._id});
-  })
+  
+  beforeEach(() => {
+    testDbDao.deleteMany();
+  });
+
+  describe('> With an empty database', () => {
+    it('> Expect get to throw a CommonDbError', () => {
+      expect(() => { testDbDao.get(); }).to.throw();
+    });
+
+    it('> Expect list to throw a CommonDbError', () => {
+      expect(() => { testDbDao.list({'_id': 'notExisting'}); }).to.not.throw();
+    });
+
+    it('> Expect delete to not throw', () => {
+      expect(() => { testDbDao.delete({'_id': 'notExisting'}); }).to.not.throw();
+    });
+
+    it('> Expect insert to succeed', () => {
+      expect(() => { testDbDao.insert(testObject); }).to.not.throw();
+      expect(testDbDao.get()).to.be.deep.equal(testObject);
+    });
+  });
 });

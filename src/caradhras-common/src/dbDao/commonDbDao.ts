@@ -1,7 +1,8 @@
 import * as _ from 'lodash';
 import { wait } from 'f-promise'
-
 import { MongoClient, Collection, MongoClientOptions, UpdateManyOptions, UpdateOneOptions, FilterQuery, UpdateWriteOpResult, InsertWriteOpResult, InsertOneWriteOpResult } from 'mongodb';
+
+import { CommonDbError } from '../errors/errorCommonDb';
 
 export interface IMongoCredentials {
   username: string;
@@ -32,7 +33,6 @@ export class CommonDbDoa<T> {
   constructor (config: IMongoConfig, collectionName: string) {
     this.config = config;
     this.collectionName = collectionName;
-    this.generateURI();
   }
 
   public init () {
@@ -43,14 +43,20 @@ export class CommonDbDoa<T> {
 
   public get (query?: FilterQuery<T>): T;
   public get (query: FilterQuery<T>): T {
-    return wait(this.collection.findOne(query));
+    const res = wait(this.collection.findOne(query));
+    if (!res) {
+      throw new CommonDbError(CommonDbError.CODES.DB_NOT_FOUND);
+    }
+    return res;
   }
 
-  /*
-  protected  list (): T;
-  protected  list (query: FilterQuery<T>): T {
-    return await(this.collection.find(query));
-  }*/
+  public list (query: FilterQuery<T> = {}): T[] {
+    const res = wait(this.collection.find(query).toArray());
+    if (!res) {
+      throw new CommonDbError(CommonDbError.CODES.DB_NOT_FOUND);
+    }
+    return res;
+  }
 
   public insert (toInsert: any): InsertOneWriteOpResult {
     return wait(this.collection.insertOne(toInsert));
@@ -68,11 +74,12 @@ export class CommonDbDoa<T> {
     return wait(this.collection.updateMany(query, object, updateOptions));
   }
 
-  public  delete (query: FilterQuery<T>) {
+  public delete (query: FilterQuery<T>) {
     wait(this.collection.deleteOne(query));
   }
 
-  public  deleteMany (query: FilterQuery<T>) {
+  public deleteMany (query?: FilterQuery<T>): any;
+  public deleteMany (query: FilterQuery<T>): any {
     wait(this.collection.deleteMany(query));
   }
 
