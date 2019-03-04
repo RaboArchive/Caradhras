@@ -1,5 +1,6 @@
 enum CommonDbErrorCode {
   DB_NOT_FOUND = 1000,
+  DB_INSERT_FAILED = 1001,
 
 } 
 

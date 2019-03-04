@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import { wait } from 'f-promise'
-import { MongoClient, Collection, MongoClientOptions, UpdateManyOptions, UpdateOneOptions, FilterQuery, UpdateWriteOpResult, InsertWriteOpResult, InsertOneWriteOpResult } from 'mongodb';
+import { MongoClient, Collection, MongoClientOptions, UpdateManyOptions, UpdateOneOptions, FilterQuery, UpdateWriteOpResult, InsertWriteOpResult, InsertOneWriteOpResult, CollectionInsertOneOptions, ObjectID } from 'mongodb';
 
 import { CommonDbError } from '../errors/errorCommonDb';
 
@@ -41,6 +41,10 @@ export class CommonDbDoa<T> {
     this.collection = this.mongoClient.db().collection(this.collectionName);
   }
 
+  public disconnect (): void {
+    wait(this.mongoClient.close());
+  }
+
   public get (query?: FilterQuery<T>): T;
   public get (query: FilterQuery<T>): T {
     const res = wait(this.collection.findOne(query));
@@ -58,12 +62,22 @@ export class CommonDbDoa<T> {
     return res;
   }
 
-  public insert (toInsert: any): InsertOneWriteOpResult {
-    return wait(this.collection.insertOne(toInsert));
+  public insert (data: T): T {
+    const res = wait(this.collection.insertOne(data));
+    if (res.result.n !== 1 || res.result.ok !== 1) {
+      throw new CommonDbError(CommonDbError.CODES.DB_INSERT_FAILED);
+    }
+    return this.get({ _id: res.insertedId });
   }
 
-  public insertMany (toInsert: any): InsertWriteOpResult {
-    return wait(this.collection.insertMany(toInsert));
+  public insertMany (datas: T[]): ObjectID[] {
+    const res = wait(this.collection.insertMany(datas));
+    if (res.result.n === 0 || res.result.ok !== 1) {
+      throw new CommonDbError(CommonDbError.CODES.DB_INSERT_FAILED);
+    }
+    return _.map(res.insertedIds, (value) => {
+      return value;
+    });
   }
 
   public updateOne (query: FilterQuery<T>, object: any, updateOptions: UpdateOneOptions): UpdateWriteOpResult {

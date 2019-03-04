@@ -12,13 +12,20 @@ interface dbTestInterface {
   object: Object;
 }
 
-const testObject = {
+const testObjects = [{
   _id: 'test',
   content: 'content',
   object: {
     dun: 'no',
   }
-}
+},
+{
+  _id: 'test2',
+  content: 'content2',
+  object: {
+    dun: 'no2',
+  }
+}]
 
 const mongoConfig: IMongoConfig = {
   host: 'localhost',
@@ -32,6 +39,11 @@ describe('> Caradhras-common', function () {
   
   before(() => {
     testDbDao.init();
+  })
+
+  after(() => {
+    testDbDao.deleteMany();
+    testDbDao.disconnect();
   })
   
   beforeEach(() => {
@@ -52,8 +64,13 @@ describe('> Caradhras-common', function () {
     });
 
     it('> Expect insert to succeed', () => {
-      expect(() => { testDbDao.insert(testObject); }).to.not.throw();
-      expect(testDbDao.get()).to.be.deep.equal(testObject);
+      expect(() => { testDbDao.insert(testObjects[0]); }).to.not.throw();
+      expect(testDbDao.get()).to.be.deep.equal(testObjects[0]);
+    });
+    
+    it('> Expect insertMany to succeed', () => {
+      expect(() => { testDbDao.insertMany(testObjects) }).to.not.throw();
+      expect(testDbDao.list()).to.be.deep.equal(testObjects);
     });
   });
 });
