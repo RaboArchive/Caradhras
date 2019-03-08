@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import { wait } from 'f-promise'
-import { MongoClient, Collection, MongoClientOptions, UpdateManyOptions, UpdateOneOptions, FilterQuery, UpdateWriteOpResult, InsertWriteOpResult, InsertOneWriteOpResult, CollectionInsertOneOptions, ObjectID } from 'mongodb';
+import { MongoClient, Collection, MongoClientOptions, UpdateManyOptions, UpdateOneOptions, FilterQuery, ObjectID, DeleteWriteOpResultObject } from 'mongodb';
 
 import { CommonDbError } from '../errors/errorCommonDb';
 
@@ -21,7 +21,7 @@ export interface IMongoQuery {
   [key: string]: string;
 }
 
-export class CommonDbDoa<T> {
+export class CommonDbDao<T> {
 
   private readonly config: IMongoConfig;
   private readonly collectionName: string;
@@ -80,21 +80,29 @@ export class CommonDbDoa<T> {
     });
   }
 
-  public updateOne (query: FilterQuery<T>, object: any, updateOptions: UpdateOneOptions): UpdateWriteOpResult {
-    return wait(this.collection.updateOne(query, object, updateOptions));
+  public findOneAndUpdate (query: FilterQuery<T>, object: any, updateOptions?: UpdateOneOptions): T {
+    const res = wait(this.collection.findOneAndUpdate(query, object, updateOptions));
+    if (res.ok !== 1) {
+      throw new CommonDbError(CommonDbError.CODES.DB_UPDATE_FAILED);
+    }
+    return res.value;
   }
 
-  public updateMany (query: FilterQuery<T>, object: any, updateOptions: UpdateManyOptions): UpdateWriteOpResult {
-    return wait(this.collection.updateMany(query, object, updateOptions));
+  public updateMany (query: FilterQuery<T>, object: any, updateOptions?: UpdateManyOptions): T[] {
+    const res = wait(this.collection.updateMany(query, object, updateOptions));
+    if (res.result.ok !== 1 ) {
+      throw new CommonDbError(CommonDbError.CODES.DB_UPDATE_FAILED);
+    }
+    return this.list(query);
   }
 
-  public delete (query: FilterQuery<T>) {
-    wait(this.collection.deleteOne(query));
+  public delete (query: FilterQuery<T>): DeleteWriteOpResultObject  {
+    return wait(this.collection.deleteOne(query));
   }
 
-  public deleteMany (query?: FilterQuery<T>): any;
-  public deleteMany (query: FilterQuery<T>): any {
-    wait(this.collection.deleteMany(query));
+  public deleteMany (query?: FilterQuery<T>): DeleteWriteOpResultObject;
+  public deleteMany (query: FilterQuery<T>):  DeleteWriteOpResultObject {
+    return wait(this.collection.deleteMany(query));
   }
 
   private generateURI (): string {
