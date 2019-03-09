@@ -39,6 +39,11 @@ export class CommonDbDao<T> {
     let options: MongoClientOptions = _.defaultsDeep(this.config.options, { useNewUrlParser: true });
     this.mongoClient = wait(MongoClient.connect(this.generateURI(), options));
     this.collection = this.mongoClient.db().collection(this.collectionName);
+    this.afterInit();
+  }
+
+  protected afterInit () {
+    // noop
   }
 
   public disconnect (): void {
