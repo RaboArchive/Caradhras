@@ -4,7 +4,7 @@ import { expect } from 'chai';
 
 setup();
 
-import { CommonDbDao, IMongoConfig } from '../dbDao/commonDbDao';
+import { AbstractDbDao, IMongoConfig } from '../dbDao/AbstractDbDao';
 
 interface dbTestInterface {
   _id?: string;
@@ -33,7 +33,7 @@ const mongoConfig: IMongoConfig = {
   database: 'caradhras_test',
 }
 
-const testDbDao: CommonDbDao<dbTestInterface> = new CommonDbDao(mongoConfig, 'test');
+const testDbDao: AbstractDbDao<dbTestInterface> = new AbstractDbDao(mongoConfig, 'test');
 
 describe('> Caradhras-common', function () {
   

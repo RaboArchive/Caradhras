@@ -21,7 +21,7 @@ export interface IMongoQuery {
   [key: string]: string;
 }
 
-export class CommonDbDao<T> {
+export class AbstractDbDao<T> {
 
   private readonly config: IMongoConfig;
   private readonly collectionName: string;
