@@ -86,13 +86,52 @@ describe('> Caradhras-common', function () {
       expect(() => { testDbDao.updateMany({}, {$set: { cc: 'me' } }) }).to.not.throw();
     });
 
-    it('> Expect delete to not throw', () => {
-      expect(() => { testDbDao.delete({}) }).to.not.throw();
+  });
 
+  describe('> With one document in the database', () => {
+    let insertedObject = _.first(testObjects);
+    beforeEach(() => {
+      testDbDao.deleteMany();
+      testDbDao.insert(insertedObject);
+    });
+
+    it('> Expect get to not throw and return the same object', () => {
+      expect(() => { testDbDao.get({_id: insertedObject._id}); }).to.not.throw();
+      const result = testDbDao.get({_id: insertedObject._id});
+      expect(result).to.be.deep.equal(insertedObject);
+    });
+
+    it('> Expect get to not throw and return the same objects', () => {
+      expect(() => { testDbDao.list({_id: insertedObject._id}); }).to.not.throw();
+      const result = testDbDao.list({_id: insertedObject._id});
+      expect(result).to.be.deep.equal([insertedObject]);
+    });
+
+    it('> Expect delete to not throw', () => {
+      expect(() => { testDbDao.delete({_id: insertedObject._id}); }).to.not.throw();
+      expect(() => { testDbDao.get({_id: insertedObject._id}); }).to.throw();
     });
 
     it('> Expect deleteMany to not throw', () => {
-      expect(() => { testDbDao.deleteMany() }).to.not.throw();
+      expect(() => { testDbDao.deleteMany({}); }).to.not.throw();
+      expect(() => { testDbDao.get({_id: insertedObject._id}); }).to.throw();
+    });
+
+    it('> Expect insert to throw', () => {
+      expect(() => { testDbDao.insert(testObjects[0]); }).to.throw();
+    });
+    
+    it('> Expect insertMany to throw', () => {
+      expect(() => { testDbDao.insertMany(testObjects) }).to.throw();
+    });
+
+    it('> Expect findOneAndUpdate to not throw', () => {
+      expect(() => { testDbDao.findOneAndUpdate({_id: insertedObject._id}, {$set: { cc: 'me' } }) }).to.not.throw();
+
+    });
+
+    it('> Expect updateMany to not throw', () => {
+      expect(() => { testDbDao.updateMany({}, {$set: { cc: 'me' } }) }).to.not.throw();
     });
   });
 });
