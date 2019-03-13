@@ -12,3 +12,12 @@ export interface IFirmware {
   hardware: string;
   buffer: Buffer;
 }
+
+export interface IFirmwareDbSchema extends IFirmware{
+  $infos : {
+    createdAt: Date;
+    createdBy: string;
+    updatedAt: Date;
+    updatedBy: string;
+  }
+}

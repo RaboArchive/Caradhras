@@ -1,15 +1,15 @@
 import { Firmware } from './Firmware';
 
 import { IFirmware, IFirmwareHardware, IFirmwareVersion } from '../../../caradhras-common';
-import { FirmwareManagerDbDao } from './FirmwareManagerDbDao';
+import { FirmwareDbDao } from './DAO/FirmwareDbDao';
 
 export class FirmwareManager {
 
-  private firmwareManagerDbDao: FirmwareManagerDbDao;
+  private firmwareDbDao: FirmwareDbDao;
   private firmwares: Firmware[];
 
   constructor () {
-    this.firmwareManagerDbDao = new FirmwareManagerDbDao();
+    // this.firmwareManagerDbDao = new FirmwareDbDao();
 
     this.downloadFirmwares();
   }

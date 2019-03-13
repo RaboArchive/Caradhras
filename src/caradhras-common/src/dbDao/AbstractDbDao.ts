@@ -25,7 +25,6 @@ export class AbstractDbDao<T> {
 
   private readonly config: IMongoConfig;
   private readonly collectionName: string;
-  private URI: string
 
   private mongoClient: MongoClient;
   private collection: Collection;
