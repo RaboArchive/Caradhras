@@ -38,51 +38,51 @@ const testDbDao: AbstractDbDao<DbTestInterface> = new AbstractDbDao(mongoConfig,
 describe('> Caradhras-common', function () {
 
   before(() => {
-    testDbDao.init();
+    (testDbDao as any).init();
   });
 
   after(() => {
-    testDbDao.deleteMany();
-    testDbDao.disconnect();
+    (testDbDao as any).deleteMany();
+    (testDbDao as any).disconnect();
   });
 
   describe('> With an empty database', () => {
     beforeEach(() => {
-      testDbDao.deleteMany();
+      (testDbDao as any).deleteMany();
     });
 
     it('> Expect get to throw a CommonDbError', () => {
-      expect(() => { testDbDao.get(); }).to.throw();
+      expect(() => { (testDbDao as any).get(); }).to.throw();
     });
 
     it('> Expect list to throw a CommonDbError', () => {
-      expect(() => { testDbDao.list({'_id': 'notExisting'}); }).to.not.throw();
+      expect(() => { (testDbDao as any).list({'_id': 'notExisting'}); }).to.not.throw();
     });
 
     it('> Expect delete to not throw', () => {
-      expect(() => { testDbDao.delete({'_id': 'notExisting'}); }).to.not.throw();
+      expect(() => { (testDbDao as any).delete({'_id': 'notExisting'}); }).to.not.throw();
     });
 
     it('> Expect deleteMany to not throw', () => {
-      expect(() => { testDbDao.deleteMany({}); }).to.not.throw();
+      expect(() => { (testDbDao as any).deleteMany({}); }).to.not.throw();
     });
 
     it('> Expect insert to succeed', () => {
-      expect(() => { testDbDao.insert(testObjects[0]); }).to.not.throw();
-      expect(testDbDao.get()).to.be.deep.equal(testObjects[0]);
+      expect(() => { (testDbDao as any).insert(testObjects[0]); }).to.not.throw();
+      expect((testDbDao as any).get()).to.be.deep.equal(testObjects[0]);
     });
 
     it('> Expect insertMany to succeed', () => {
-      expect(() => { testDbDao.insertMany(testObjects); }).to.not.throw();
-      expect(testDbDao.list()).to.be.deep.equal(testObjects);
+      expect(() => { (testDbDao as any).insertMany(testObjects); }).to.not.throw();
+      expect((testDbDao as any).list()).to.be.deep.equal(testObjects);
     });
 
     it('> Expect findOneAndUpdate to not throw', () => {
-      expect(() => { testDbDao.findOneAndUpdate({_id: 'unknown'}, {$set: { cc: 'me' } }); }).to.not.throw();
+      expect(() => { (testDbDao as any).findOneAndUpdate({_id: 'unknown'}, {$set: { cc: 'me' } }); }).to.not.throw();
     });
 
     it('> Expect updateMany to not throw', () => {
-      expect(() => { testDbDao.updateMany({}, {$set: { cc: 'me' } }); }).to.not.throw();
+      expect(() => { (testDbDao as any).updateMany({}, {$set: { cc: 'me' } }); }).to.not.throw();
     });
 
   });
@@ -90,47 +90,47 @@ describe('> Caradhras-common', function () {
   describe('> With one document in the database', () => {
     const insertedObject = _.first(testObjects);
     beforeEach(() => {
-      testDbDao.deleteMany();
-      testDbDao.insert(insertedObject);
+      (testDbDao as any).deleteMany();
+      (testDbDao as any).insert(insertedObject);
     });
 
     it('> Expect get to not throw and return the same object', () => {
-      expect(() => { testDbDao.get({_id: insertedObject._id}); }).to.not.throw();
-      const result = testDbDao.get({_id: insertedObject._id});
+      expect(() => { (testDbDao as any).get({_id: insertedObject._id}); }).to.not.throw();
+      const result = (testDbDao as any).get({_id: insertedObject._id});
       expect(result).to.be.deep.equal(insertedObject);
     });
 
     it('> Expect get to not throw and return the same objects', () => {
-      expect(() => { testDbDao.list({_id: insertedObject._id}); }).to.not.throw();
-      const result = testDbDao.list({_id: insertedObject._id});
+      expect(() => { (testDbDao as any).list({_id: insertedObject._id}); }).to.not.throw();
+      const result = (testDbDao as any).list({_id: insertedObject._id});
       expect(result).to.be.deep.equal([insertedObject]);
     });
 
     it('> Expect delete to not throw', () => {
-      expect(() => { testDbDao.delete({_id: insertedObject._id}); }).to.not.throw();
-      expect(() => { testDbDao.get({_id: insertedObject._id}); }).to.throw();
+      expect(() => { (testDbDao as any).delete({_id: insertedObject._id}); }).to.not.throw();
+      expect(() => { (testDbDao as any).get({_id: insertedObject._id}); }).to.throw();
     });
 
     it('> Expect deleteMany to not throw', () => {
-      expect(() => { testDbDao.deleteMany({}); }).to.not.throw();
-      expect(() => { testDbDao.get({_id: insertedObject._id}); }).to.throw();
+      expect(() => { (testDbDao as any).deleteMany({}); }).to.not.throw();
+      expect(() => { (testDbDao as any).get({_id: insertedObject._id}); }).to.throw();
     });
 
     it('> Expect insert to throw', () => {
-      expect(() => { testDbDao.insert(testObjects[0]); }).to.throw();
+      expect(() => { (testDbDao as any).insert(testObjects[0]); }).to.throw();
     });
 
     it('> Expect insertMany to throw', () => {
-      expect(() => { testDbDao.insertMany(testObjects); }).to.throw();
+      expect(() => { (testDbDao as any).insertMany(testObjects); }).to.throw();
     });
 
     it('> Expect findOneAndUpdate to not throw', () => {
-      expect(() => { testDbDao.findOneAndUpdate({_id: insertedObject._id}, {$set: { cc: 'me' } }); }).to.not.throw();
+      expect(() => { (testDbDao as any).findOneAndUpdate({_id: insertedObject._id}, {$set: { cc: 'me' } }); }).to.not.throw();
 
     });
 
     it('> Expect updateMany to not throw', () => {
-      expect(() => { testDbDao.updateMany({}, {$set: { cc: 'me' } }); }).to.not.throw();
+      expect(() => { (testDbDao as any).updateMany({}, {$set: { cc: 'me' } }); }).to.not.throw();
     });
   });
 });

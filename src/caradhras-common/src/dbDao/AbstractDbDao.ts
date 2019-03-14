@@ -45,12 +45,12 @@ export class AbstractDbDao<T> {
     // noop
   }
 
-  public disconnect (): void {
+  protected disconnect (): void {
     wait(this.mongoClient.close());
   }
 
-  public get (query?: FilterQuery<T>): T;
-  public get (query: FilterQuery<T>): T {
+  protected get (query?: FilterQuery<T>): T;
+  protected get (query: FilterQuery<T>): T {
     const res = wait(this.collection.findOne(query));
     if (!res) {
       throw new CommonDbError(CommonDbError.CODES.DB_NOT_FOUND);
@@ -58,7 +58,7 @@ export class AbstractDbDao<T> {
     return res;
   }
 
-  public list (query: FilterQuery<T> = {}): T[] {
+  protected list (query: FilterQuery<T> = {}): T[] {
     const res = wait(this.collection.find(query).toArray());
     if (!res) {
       throw new CommonDbError(CommonDbError.CODES.DB_NOT_FOUND);
@@ -66,7 +66,7 @@ export class AbstractDbDao<T> {
     return res;
   }
 
-  public insert (data: T): T {
+  protected insert (data: T): T {
     const res = wait(this.collection.insertOne(data));
     if (res.result.n !== 1 || res.result.ok !== 1) {
       throw new CommonDbError(CommonDbError.CODES.DB_INSERT_FAILED);
@@ -74,7 +74,7 @@ export class AbstractDbDao<T> {
     return this.get({ _id: res.insertedId });
   }
 
-  public insertMany (datas: T[]): ObjectID[] {
+  protected insertMany (datas: T[]): ObjectID[] {
     const res = wait(this.collection.insertMany(datas));
     if (res.result.n === 0 || res.result.ok !== 1) {
       throw new CommonDbError(CommonDbError.CODES.DB_INSERT_FAILED);
@@ -84,7 +84,7 @@ export class AbstractDbDao<T> {
     });
   }
 
-  public findOneAndUpdate (query: FilterQuery<T>, object: any, updateOptions?: UpdateOneOptions): T {
+  protected findOneAndUpdate (query: FilterQuery<T>, object: any, updateOptions?: UpdateOneOptions): T {
     const res = wait(this.collection.findOneAndUpdate(query, object, updateOptions));
     if (res.ok !== 1) {
       throw new CommonDbError(CommonDbError.CODES.DB_UPDATE_FAILED);
@@ -92,7 +92,7 @@ export class AbstractDbDao<T> {
     return res.value;
   }
 
-  public updateMany (query: FilterQuery<T>, object: any, updateOptions?: UpdateManyOptions): T[] {
+  protected updateMany (query: FilterQuery<T>, object: any, updateOptions?: UpdateManyOptions): T[] {
     const res = wait(this.collection.updateMany(query, object, updateOptions));
     if (res.result.ok !== 1 ) {
       throw new CommonDbError(CommonDbError.CODES.DB_UPDATE_FAILED);
@@ -100,12 +100,12 @@ export class AbstractDbDao<T> {
     return this.list(query);
   }
 
-  public delete (query: FilterQuery<T>): DeleteWriteOpResultObject  {
+  protected delete (query: FilterQuery<T>): DeleteWriteOpResultObject  {
     return wait(this.collection.deleteOne(query));
   }
 
-  public deleteMany (query?: FilterQuery<T>): DeleteWriteOpResultObject;
-  public deleteMany (query: FilterQuery<T>): DeleteWriteOpResultObject {
+  protected deleteMany (query?: FilterQuery<T>): DeleteWriteOpResultObject;
+  protected deleteMany (query: FilterQuery<T>): DeleteWriteOpResultObject {
     return wait(this.collection.deleteMany(query));
   }
 
