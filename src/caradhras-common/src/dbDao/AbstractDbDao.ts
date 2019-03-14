@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import { wait } from 'f-promise'
+import { wait } from 'f-promise';
 import { MongoClient, Collection, MongoClientOptions, UpdateManyOptions, UpdateOneOptions, FilterQuery, ObjectID, DeleteWriteOpResultObject } from 'mongodb';
 
 import { CommonDbError } from '../errors/errorCommonDb';
@@ -35,7 +35,7 @@ export class AbstractDbDao<T> {
   }
 
   public init () {
-    let options: MongoClientOptions = _.defaultsDeep(this.config.options, { useNewUrlParser: true });
+    const options: MongoClientOptions = _.defaultsDeep(this.config.options, { useNewUrlParser: true });
     this.mongoClient = wait(MongoClient.connect(this.generateURI(), options));
     this.collection = this.mongoClient.db().collection(this.collectionName);
     this.afterInit();
@@ -105,15 +105,15 @@ export class AbstractDbDao<T> {
   }
 
   public deleteMany (query?: FilterQuery<T>): DeleteWriteOpResultObject;
-  public deleteMany (query: FilterQuery<T>):  DeleteWriteOpResultObject {
+  public deleteMany (query: FilterQuery<T>): DeleteWriteOpResultObject {
     return wait(this.collection.deleteMany(query));
   }
 
   private generateURI (): string {
     let userWithPassword: string | undefined = '';
     if (this.config.credentials) {
-      userWithPassword = `${this.config.credentials.username}:${this.config.credentials.pass}@`
+      userWithPassword = `${this.config.credentials.username}:${this.config.credentials.pass}@`;
     }
-    return `mongodb://${userWithPassword}${this.config.host}:${this.config.port}/${this.config.database}`
+    return `mongodb://${userWithPassword}${this.config.host}:${this.config.port}/${this.config.database}`;
   }
 }

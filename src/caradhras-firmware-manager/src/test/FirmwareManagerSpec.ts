@@ -2,9 +2,9 @@ import { expect } from 'chai';
 
 describe('FirmwareManager', () => {
   before(() => {
-    //noop
-  })
+    // noop
+  });
   it('> ', () => {
-    
-  })
+
+    });
 });

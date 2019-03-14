@@ -23,7 +23,5 @@ export class FirmwareManager {
   }
 
   private downloadFirmwares (): void {
-    
-
   }
 }

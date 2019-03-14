@@ -3,7 +3,7 @@ export interface IFirmwareVersion {
 }
 
 export interface IFirmwareHardware {
-  hardware?:string;
+  hardware?: string;
 }
 
 export interface IFirmware {
@@ -13,11 +13,11 @@ export interface IFirmware {
   buffer: Buffer;
 }
 
-export interface IFirmwareDbSchema extends IFirmware{
-  $infos : {
+export interface IFirmwareDbSchema extends IFirmware {
+  $infos: {
     createdAt: Date;
     createdBy: string;
     updatedAt: Date;
     updatedBy: string;
-  }
+  };
 }

@@ -6,6 +6,7 @@
     "start": "npm run serve",
     "build": "npm run build-ts && npm run tslint",
     "serve": "node dist/Caradhras.js",
+    "init": "node dist/init.js",
     "watch-node": "nodemon dist/Caradhras.js",
     "test": "mocha test/*",
     "build-ts": "tsc",
@@ -25,7 +26,8 @@
   },
   "homepage": "https://github.com/RaboliotTheGrey/Caradhras#readme",
   "dependencies": {
-    "@types/node": "^11.9.4"
+    "@types/node": "^11.9.4",
+    "f-promise": "^1.4.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",

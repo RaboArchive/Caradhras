@@ -1,11 +1,11 @@
 import { run } from 'f-promise';
 
-const main = (): Promise<any> => {
+const init = (): Promise<any> => {
   return run(() => {
-    console.log('CARADHRAS');
+    console.log('INIT');
   });
 };
 
-main().catch((e) => {
+init().catch((e) => {
   console.log('Crash with error', e);
 });
