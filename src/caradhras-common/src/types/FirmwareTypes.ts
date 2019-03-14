@@ -1,9 +1,9 @@
 export interface IFirmwareVersion {
-  version?: string;
+  version: string;
 }
 
 export interface IFirmwareHardware {
-  hardware?: string;
+  hardware: string;
 }
 
 export interface IFirmware {

@@ -2,7 +2,8 @@ import { run } from 'f-promise';
 
 const init = (): Promise<any> => {
   return run(() => {
-    console.log('INIT');
+    console.log('INIT - Populate Dbs with data');
+
   });
 };
 

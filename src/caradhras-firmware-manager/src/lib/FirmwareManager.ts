@@ -1,27 +1,46 @@
 import { Firmware } from './Firmware';
 
-import { IFirmware, IFirmwareHardware, IFirmwareVersion } from '../../../caradhras-common';
+import { IFirmware, IMongoConfig } from '../../../caradhras-common';
 import { FirmwareDbDao } from './DAO/FirmwareDbDao';
+
+interface ISubFirmwareStructure {
+  [version: string]: Firmware;
+}
+interface IFirmwareStructure {
+  [string: string]: ISubFirmwareStructure;
+}
 
 export class FirmwareManager {
 
   private firmwareDbDao: FirmwareDbDao;
-  private firmwares: Firmware[];
+  private firmwares: IFirmwareStructure = {};
 
-  constructor () {
-    // this.firmwareManagerDbDao = new FirmwareDbDao();
-
-    this.downloadFirmwares();
+  constructor (mongoConfig: IMongoConfig) {
+    this.firmwareDbDao = new FirmwareDbDao(mongoConfig);
   }
 
-  public addFirmware (): void {
-
+  public getFirmware (hardware: string, version: string): Firmware {
+    const firmwareInCache = this.isFirmwareInCache(hardware, version);
+    if (firmwareInCache) {
+      return firmwareInCache;
+    }
+    const firmware: Firmware = this.generateFirmware(this.firmwareDbDao.getFirmware(hardware, version));
+    this.setFirmware(firmware);
+    return firmware;
   }
 
-  public getFirmware (hardware?: IFirmwareHardware, version?: IFirmwareVersion): IFirmware {
-    return {} as IFirmware;
+  private isFirmwareInCache (hardware: string, version: string): Firmware|undefined {
+    return this.firmwares[hardware] && this.firmwares[hardware][version];
   }
 
-  private downloadFirmwares (): void {
+  private generateFirmware (firmware: IFirmware): Firmware {
+    return new Firmware(firmware.version, firmware.hardware, firmware.buffer);
+  }
+
+  private setFirmware (firmware: Firmware): void {
+    if (!this.firmwares[firmware.getHardware]) {
+      this.firmwares[firmware.getHardware] = {};
+    }
+    this.firmwares[firmware.getHardware][firmware.getVersion] = firmware;
   }
 }
