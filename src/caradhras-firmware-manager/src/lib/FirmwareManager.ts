@@ -3,11 +3,11 @@ import { Firmware } from './Firmware';
 import { IFirmware, IMongoConfig } from '../../../caradhras-common';
 import { FirmwareDbDao } from './DAO/FirmwareDbDao';
 
-interface ISubFirmwareStructure {
+interface IFirmwareSubStructure {
   [version: string]: Firmware;
 }
 interface IFirmwareStructure {
-  [string: string]: ISubFirmwareStructure;
+  [string: string]: IFirmwareSubStructure;
 }
 
 export class FirmwareManager {
