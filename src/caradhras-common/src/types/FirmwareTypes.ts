@@ -8,13 +8,12 @@ export interface IFirmwareHardware {
 
 export interface IFirmware {
   version: string;
-  numericalVersion: number;
   hardware: string;
   buffer: Buffer;
 }
 
 export interface IFirmwareDbSchema extends IFirmware {
-  $infos: {
+  _infos: {
     createdAt: Date;
     createdBy: string;
     updatedAt: Date;
