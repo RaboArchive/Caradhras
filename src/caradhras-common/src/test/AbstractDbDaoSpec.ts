@@ -2,9 +2,9 @@ import * as _ from 'lodash';
 import { setup } from 'f-mocha';
 import { expect } from 'chai';
 
-setup();
-
 import { AbstractDbDao, IMongoConfig } from '../dbDao/AbstractDbDao';
+
+setup();
 
 interface DbTestInterface {
   _id?: string;
