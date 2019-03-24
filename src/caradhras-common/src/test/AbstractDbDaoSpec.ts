@@ -42,13 +42,22 @@ describe('> Caradhras-common', function () {
   });
 
   after(() => {
-    (testDbDao as any).deleteMany();
+    (testDbDao as any).drop();
     (testDbDao as any).disconnect();
   });
 
   describe('> With an empty database', () => {
     beforeEach(() => {
       (testDbDao as any).deleteMany();
+    });
+
+    it('> Expect index creation to not throw', () => {
+      const indexes = [{
+        key: { content: 1 },
+        name: 'content_uniq',
+        unique: true,
+      }];
+      expect(() => (testDbDao as any).createIndexes(indexes)).to.not.throw();
     });
 
     it('> Expect get to throw a CommonDbError', () => {

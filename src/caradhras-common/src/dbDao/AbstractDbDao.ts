@@ -21,6 +21,16 @@ export interface IMongoQuery {
   [key: string]: string;
 }
 
+interface IIndexKeys {
+  [k: string]: number;
+}
+
+export interface IMongoIndex {
+  key: IIndexKeys;
+  name: string;
+  unique?: boolean;
+}
+
 export class AbstractDbDao<T> {
 
   private readonly config: IMongoConfig;
@@ -45,8 +55,16 @@ export class AbstractDbDao<T> {
     // noop
   }
 
+  protected createIndexes (indexes: IMongoIndex[]) {
+    wait(this.collection.createIndexes(indexes));
+  }
+
   protected disconnect (): void {
     wait(this.mongoClient.close());
+  }
+
+  private drop (): void {
+    wait(this.collection.drop());
   }
 
   protected get (query?: FilterQuery<T>): T;
