@@ -8,7 +8,7 @@ export class FirmwareDbDao extends AbstractDbDao<IFirmwareDbSchema> {
   }
 
   public afterInit() {
-    /*this.createIndexes([
+    this.createIndexes([
       {
         key: {
           hardware: 1,
@@ -17,22 +17,21 @@ export class FirmwareDbDao extends AbstractDbDao<IFirmwareDbSchema> {
         name: 'hardwareVersion_Uniq',
         unique: true,
       },
-    ]);*/
+    ]);
   }
 
   public getFirmware(hardware: string, version: string): IFirmware {
     const firmware: IFirmwareDbSchema = this.get({hardware, version});
-    // TODO : Fix with something like this to prevent usage of buffer.buffer
-    // firmware.buffer = firmware.buffer.buffer;
+    firmware.buffer = Buffer.from(firmware.buffer.buffer);
     return _.omit(firmware, '_info') as IFirmware;
   }
 
   public insertFirmware(firmware: Firmware): IFirmware {
     const now = new Date();
     const firmwareToInsert: IFirmwareDbSchema = {
-      version: firmware.getVersion,
-      hardware: firmware.getHardware,
-      buffer: firmware.getFirmware,
+      version: firmware.getVersion(),
+      hardware: firmware.getHardware(),
+      buffer: firmware.getFirmware(),
       _infos: {
         createdAt: now,
         createdBy: 'firmwareManager',

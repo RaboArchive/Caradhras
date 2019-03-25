@@ -16,7 +16,7 @@ const mongoConfig: IMongoConfig = {
 
 const firmwareDbDao: FirmwareDbDao = new FirmwareDbDao(mongoConfig, 'firmware_test');
 
-describe.only('FirmwareDbDao', () => {
+describe('FirmwareDbDao', () => {
   let firmware: Firmware;
   before(() => {
     firmwareDbDao.init();
@@ -29,16 +29,33 @@ describe.only('FirmwareDbDao', () => {
   });
 
   describe('> with an empty database', () => {
+    afterEach(() => {
+      (firmwareDbDao as any).deleteMany();
+    });
+
     it('> should throw getting no firmware', () => {
       expect(() => firmwareDbDao.getFirmware('noth', 'ing')).to.throw();
     });
 
     it('> should insert the given firmware', () => {
       expect(() => firmwareDbDao.insertFirmware(firmware)).to.not.throw();
-      const insertedFirmware: IFirmware = firmwareDbDao.getFirmware(firmware.getHardware, firmware.getVersion);
-      expect(insertedFirmware.hardware).to.be.equal(firmware.getHardware);
-      expect(insertedFirmware.version).to.be.equal(firmware.getVersion);
-      expect(insertedFirmware.buffer.buffer).to.be.deep.equal(firmware.getFirmware);
+      const insertedFirmware: IFirmware = firmwareDbDao.getFirmware(firmware.getHardware(), firmware.getVersion());
+      expect(insertedFirmware.hardware).to.be.equal(firmware.getHardware());
+      expect(insertedFirmware.version).to.be.equal(firmware.getVersion());
+      expect(insertedFirmware.buffer).to.be.deep.equal(firmware.getFirmware());
+    });    
+  });
+
+  describe('> with a firmware set in the database', () => {
+    before(() => {
+      firmwareDbDao.insertFirmware(firmware);
+    });
+
+    it('> should get the correct firmware', () => {
+      const insertedFirmware: IFirmware = firmwareDbDao.getFirmware(firmware.getHardware(), firmware.getVersion());
+      expect(insertedFirmware.hardware).to.be.equal(firmware.getHardware());
+      expect(insertedFirmware.version).to.be.equal(firmware.getVersion());
+      expect(insertedFirmware.buffer).to.be.deep.equal(firmware.getFirmware());
     });
   });
 });

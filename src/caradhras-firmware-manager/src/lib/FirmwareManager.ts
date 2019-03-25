@@ -17,6 +17,7 @@ export class FirmwareManager {
 
   constructor (mongoConfig: IMongoConfig) {
     this.firmwareDbDao = new FirmwareDbDao(mongoConfig);
+    console.log(this.firmwareDbDao);
   }
 
   public getFirmware (hardware: string, version: string): Firmware {
@@ -38,9 +39,9 @@ export class FirmwareManager {
   }
 
   private setFirmware (firmware: Firmware): void {
-    if (!this.firmwares[firmware.getHardware]) {
-      this.firmwares[firmware.getHardware] = {};
+    if (!this.firmwares[firmware.getHardware()]) {
+      this.firmwares[firmware.getHardware()] = {};
     }
-    this.firmwares[firmware.getHardware][firmware.getVersion] = firmware;
+    this.firmwares[firmware.getHardware()][firmware.getVersion()] = firmware;
   }
 }

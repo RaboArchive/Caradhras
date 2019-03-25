@@ -18,16 +18,16 @@ export class Firmware {
     this.buffer = buffer;
   }
 
-  public get getVersion (): string {
+  public getVersion (): string {
     return this.version;
   }
-  public get getNumericalVersion (): number {
+  public getNumericalVersion (): number {
     return this.numericalVersion;
   }
-  public get getHardware (): string {
+  public getHardware (): string {
     return this.hardware;
   }
-  public get getFirmware (): Buffer {
+  public getFirmware (): Buffer {
     return this.buffer;
   }
 
