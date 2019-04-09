@@ -41,4 +41,8 @@ export class FirmwareDbDao extends AbstractDbDao<IFirmwareDbSchema> {
     };
     return _.omit(this.insert(firmwareToInsert), '_info') as IFirmware;
   }
+
+  private deleteFirmware(hardware: string, version: string): void {
+    this.delete({ hardware, version });
+  }
 }

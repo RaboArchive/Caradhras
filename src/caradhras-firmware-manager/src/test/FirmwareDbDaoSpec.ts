@@ -57,5 +57,10 @@ describe('FirmwareDbDao', () => {
       expect(insertedFirmware.version).to.be.equal(firmware.getVersion());
       expect(insertedFirmware.buffer).to.be.deep.equal(firmware.getFirmware());
     });
+
+    it('> should delete the firmware', () => {
+      (firmwareDbDao as any).deleteFirmware(firmware.getHardware(), firmware.getVersion());
+      expect(() => firmwareDbDao.getFirmware(firmware.getHardware(), firmware.getVersion())).to.throw();
+    });
   });
 });
