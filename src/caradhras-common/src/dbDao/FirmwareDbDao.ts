@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
-import { AbstractDbDao, IFirmwareDbSchema, IMongoConfig, IFirmware } from '../../../../caradhras-common';
-import { Firmware } from '../Firmware';
+import { AbstractDbDao, IFirmwareDbSchema, IMongoConfig, IFirmware } from '../..';
+import { Firmware } from '../../../caradhras-firmware-manager/src/lib/Firmware';
 
 export class FirmwareDbDao extends AbstractDbDao<IFirmwareDbSchema> {
   constructor (config: IMongoConfig, collectionName: string = 'firmware') {

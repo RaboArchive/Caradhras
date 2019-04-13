@@ -2,9 +2,10 @@ import _ from 'lodash';
 import { setup } from 'f-mocha';
 import { expect } from 'chai';
 
-import { FirmwareDbDao } from './../lib/DAO/FirmwareDbDao';
-import { IMongoConfig, IFirmware } from './../../../caradhras-common';
-import { Firmware } from './../lib/Firmware';
+import { IMongoConfig, IFirmware } from '../..';
+import { Firmware } from '../../../caradhras-firmware-manager/src/lib/Firmware';
+import { FirmwareDbDao } from '../dbDao/FirmwareDbDao';
+import { MongoDbUtils } from '../tools/mongoDbUtils';
 
 setup();
 
@@ -15,11 +16,13 @@ const mongoConfig: IMongoConfig = {
 };
 
 const firmwareDbDao: FirmwareDbDao = new FirmwareDbDao(mongoConfig, 'firmware_test');
+let mongoDbUtils: MongoDbUtils = new MongoDbUtils(mongoConfig);
 
 describe('FirmwareDbDao', () => {
   let firmware: Firmware;
   before(() => {
     firmwareDbDao.init();
+    mongoDbUtils.init();
     firmware = new Firmware('0.0.1', 'A', Buffer.from([0x01, 0x02, 0x03, 0x04, 0x05]));
   });
 

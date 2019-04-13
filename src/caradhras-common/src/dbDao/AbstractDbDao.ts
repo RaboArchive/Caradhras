@@ -45,7 +45,7 @@ export class AbstractDbDao<T> {
   }
 
   public init () {
-    const options: MongoClientOptions = _.defaultsDeep(this.config.options, { useNewUrlParser: true });
+    const options: MongoClientOptions = _.defaultsDeep({}, this.config.options, { useNewUrlParser: true });
     this.mongoClient = wait(MongoClient.connect(this.generateURI(), options));
     this.collection = this.mongoClient.db().collection(this.collectionName);
     this.afterInit();

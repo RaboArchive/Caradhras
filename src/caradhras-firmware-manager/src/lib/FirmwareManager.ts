@@ -1,7 +1,6 @@
-import { FirmwareDbDao } from './DAO/FirmwareDbDao';
 import { Firmware } from './Firmware';
 
-import { IFirmware, IMongoConfig } from '../../../caradhras-common';
+import { IFirmware, IMongoConfig, FirmwareDbDao } from '../../../caradhras-common';
 
 interface IFirmwareSubStructure {
   [version: string]: Firmware;
