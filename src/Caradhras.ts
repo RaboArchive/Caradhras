@@ -1,10 +1,9 @@
 import { run } from 'f-promise';
-
-import { FirmwareManagerService } from './caradhras-firmware-manager';
+import { CaradhrasApplication } from './lib/CaradhrasApplication';
 
 const main = (): Promise<any> => {
   return run(() => {
-    return new FirmwareManagerService().startApp();
+    return new CaradhrasApplication().startApp();
   });
 };
 

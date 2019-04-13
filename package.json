@@ -26,8 +26,10 @@
   },
   "homepage": "https://github.com/RaboliotTheGrey/Caradhras#readme",
   "dependencies": {
+    "@types/lodash": "^4.14.123",
     "@types/node": "^11.9.4",
-    "f-promise": "^1.4.0"
+    "f-promise": "^1.4.0",
+    "lodash": "^4.17.11"
   },
   "devDependencies": {
     "chai": "^4.2.0",

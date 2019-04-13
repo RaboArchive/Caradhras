@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import { setup } from 'f-mocha';
 import { expect } from 'chai';
 
-import { AbstractDbDao, IMongoConfig } from '../dbDao/AbstractDbDao';
+import { AbstractDbDao, IMongoConfig } from '../Abstract/Dao/AbstractDbDao';
 
 setup();
 

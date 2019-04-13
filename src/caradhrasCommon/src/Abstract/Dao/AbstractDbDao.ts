@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import { wait } from 'f-promise';
 import { MongoClient, Collection, MongoClientOptions, UpdateManyOptions, UpdateOneOptions, FilterQuery, ObjectID, DeleteWriteOpResultObject } from 'mongodb';
 
-import { CommonDbError } from '../errors/errorCommonDb';
+import { CommonDbError } from '../../errors/errorCommonDb';
 
 export interface IMongoCredentials {
   username: string;
